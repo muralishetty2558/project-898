@@ -1,0 +1,49 @@
+--**IMPORTANT:
+ Step 1: Manually converted the given xlsx to csv individual sheets
+ **--
+
+----------------------------------------
+LOAD DATA INFILE 'C:/Users/abc/Desktop/users.csv' 
+INTO TABLE users 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+-----------------------------------------------------
+LOAD DATA INFILE 'C:/Users/abc/Desktop/treasures.csv' 
+INTO TABLE treasures 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+-----------------------------------------------------
+LOAD DATA INFILE 'C:/Users/abc/Desktop/money_values.csv' 
+INTO TABLE money_values 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+-----------------------------------------------------
+
+-- SQL query used for location range calculation.
+SELECT
+`id`,
+`name`,
+ACOS( SIN( RADIANS( `latitude` ) ) * SIN( RADIANS( $fLat ) ) + COS( RADIANS( `latitude` ) )
+* COS( RADIANS( $fLat )) * COS( RADIANS( `longitude` ) - RADIANS( $fLon )) ) * 6380 AS `distance`
+FROM `stations`
+WHERE
+ACOS( SIN( RADIANS( `latitude` ) ) * SIN( RADIANS( $fLat ) ) + COS( RADIANS( `latitude` ) )
+* COS( RADIANS( $fLat )) * COS( RADIANS( `longitude` ) - RADIANS( $fLon )) ) * 6380 < 10
+ORDER BY `distance`
+-----------------------------------------------------
+SELECT
+`id`,
+`name`,
+ACOS( SIN( RADIANS( `latitude` ) ) * SIN( RADIANS( 1.3273451 ) ) + COS( RADIANS( `latitude` ) )
+* COS( RADIANS( 1.3273451 )) * COS( RADIANS( `longitude` ) - RADIANS( 103.8756757 )) ) * 6380 AS `distance`
+FROM `treasures`
+WHERE
+ACOS( SIN( RADIANS( `latitude` ) ) * SIN( RADIANS( 1.3273451 ) ) + COS( RADIANS( `latitude` ) )
+* COS( RADIANS( 1.3273451 )) * COS( RADIANS( `longitude` ) - RADIANS( 103.8756757 )) ) * 6380 < 3
+ORDER BY `distance`
